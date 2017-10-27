@@ -9,8 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.web3j.protocol.Web3j;
 
 import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Data
@@ -19,15 +20,10 @@ public class EtherdeltaMainConfig {
     public JsonObject jsonConfig = null;
 
     /**
-     * List of Tokens, parsed from JSON file
+     * Map of Tokens, parsed from JSON file
+     * Key of that map is token Ethereum address
      */
-    public List<EthereumToken> tokens = null;
-
-    /**
-     * public String socketURL = "https://socket.etherdelta.com";
-     * public Long gasLimit = 150000L;
-     * public Long gasPrice = 4000000000L;
-     */
+    public Map<String, EthereumToken> tokens = null;
 
     /**
      * Initializing from JSON configuration
@@ -51,12 +47,12 @@ public class EtherdeltaMainConfig {
     private void initTokens() {
         if (this.jsonConfig.has("tokens") && this.jsonConfig.get("tokens").isJsonArray()) {
             JsonArray arrTokens =  this.jsonConfig.get("tokens").getAsJsonArray();
-            tokens = new LinkedList<>();
+            tokens = new HashMap<String, EthereumToken>();
 
             for (JsonElement entry: arrTokens) {
                 JsonObject asJsonObject = entry.getAsJsonObject();
-                if (asJsonObject.get("name").getAsString().equals("ETH")) continue;
-                tokens.add(new EthereumToken(asJsonObject));
+                EthereumToken ethereumToken = new EthereumToken(asJsonObject);
+                tokens.put(ethereumToken.getAddress(), ethereumToken);
             }
         }
     }
@@ -70,7 +66,10 @@ public class EtherdeltaMainConfig {
             throw new EtherdeltaApiException("Expected at least one socketServer listed");
         }
         // we could actually choose random one from this array
-        return urls.get(0).getAsString().replaceAll("https://", "wss://") + "/socket.io/?EIO=3&transport=websocket";
+        String timestamp = String.valueOf(new Date().getTime());
+        return urls.get(0).getAsString()
+                 .replaceAll("https://", "wss://")
+                + "/socket.io/?EIO=3&transport=websocket&t=" + timestamp;
     }
 
     public String getLastAddress() throws EtherdeltaApiException {
@@ -95,10 +94,18 @@ public class EtherdeltaMainConfig {
                 getGasPrice(), getGasLimit());
     }
 
+    /**
+     * Getting Gas price from stored JSON configuration
+     * @return ethereum gas price
+     */
     public BigInteger getGasPrice() {
         return jsonConfig.get("ethGasPrice").getAsBigInteger();
     }
 
+    /**
+     * Getting Gas limit from stored JSON configuration
+     * @return gas limit
+     */
     public BigInteger getGasLimit() {
         return jsonConfig.get("gasOrder").getAsBigInteger();
     }

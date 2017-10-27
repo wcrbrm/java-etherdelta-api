@@ -1,0 +1,14 @@
+[
+  "funds",
+  [
+    {
+      "txHash": "0x431ad37fac46048d19e728515ae8441fa94c0ccbba720ff9047ef57e95d1ee47",
+      "date": "2017-10-27T19:36:40.000Z",
+      "tokenAddr": "0x0000000000000000000000000000000000000000",
+      "kind": "Withdraw",
+      "user": "0x317a7d3ead471c13b6d569aa37e38246e939ae55",
+      "amount": "0.002",
+      "balance": "0.0044921911"
+    }
+  ]
+]

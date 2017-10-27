@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.Future;
 
 @Data
 @Slf4j
@@ -80,10 +81,9 @@ public class EtherdeltaApi {
     /**
      * Connecting to web socket
      * @param adapter for listening of socket
-     * @return web socket session
      * @throws EtherdeltaApiException in case of any error
      */
-    public Session connectToSocket(WebSocketAdapter adapter) throws EtherdeltaApiException{
+    public void connectToSocket(WebSocketAdapter adapter) throws EtherdeltaApiException{
         URI uri = null;
         try {
             uri = new URI(this.mainConfig.getSocketServer());
@@ -93,11 +93,13 @@ public class EtherdeltaApi {
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setTrustAll(true); // The magic
         WebSocketClient client = new WebSocketClient(sslContextFactory);
+        client.setMaxIdleTimeout(0);
         try {
             client.start();
-            return client.connect(adapter, uri).get();
+            Future<Session> fut = client.connect(adapter, uri);
         } catch (Exception e) {
-            throw new EtherdeltaApiException(e.getMessage());
+            throw new EtherdeltaApiException( e.getMessage());
         }
+
     }
 }

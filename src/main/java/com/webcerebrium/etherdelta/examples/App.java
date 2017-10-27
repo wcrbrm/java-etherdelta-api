@@ -4,7 +4,6 @@ import com.webcerebrium.etherdelta.api.EtherdeltaApi;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
 import com.webcerebrium.etherdelta.api.EtherdeltaSocketAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jetty.websocket.api.Session;
 
 import java.util.concurrent.ExecutionException;
 
@@ -13,25 +12,25 @@ public class App {
     public static void main(String[] args) throws EtherdeltaApiException, ExecutionException, InterruptedException {
 
         EtherdeltaApi api = new EtherdeltaApi().initWallet();
-        log.info("{} tokens loaded", api.getMainConfig().getTokens().size());
+        log.info("{} known tokens", api.getMainConfig().getTokens().size());
 
-//        Web3j web3 = Web3j.build(new HttpService("https://mainnet.infura.io/Ky03pelFIxoZdAUsr82w"));  // defaults to http://localhost:8545/
-//        Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
-//        String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-//        log.info("clientVersion = {}", clientVersion);
-//
-//        EtherdeltaContract smartContract = api.getSmartContract(web3);
-//        log.info("FEE TAKE={}", smartContract.feeTake().get().getValue());
-//        log.info("FEE MAKE={}", smartContract.feeMake().get().getValue());
-//        log.info("FEE REBATE={}", smartContract.feeRebate().get().getValue());
+//      Web3j web3 = Web3j.build(new HttpService("https://mainnet.infura.io/Ky03pelFIxoZdAUsr82w"));  // defaults to http://localhost:8545/
+//      Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
+//      String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+//      log.info("clientVersion = {}", clientVersion);
+
+//      EtherdeltaContract smartContract = api.getSmartContract(web3);
+//      log.info("FEE TAKE={}", smartContract.feeTake().get().getValue());
+//      log.info("FEE MAKE={}", smartContract.feeMake().get().getValue());
+//      log.info("FEE REBATE={}", smartContract.feeRebate().get().getValue());
 
         // Address tokenAddress = new Address("0x0d88ed6e74bbfd96b831231638b66c05571e824f");
         // log.info("ORDERS OF AVT = {}", smartContract.orders(tokenAddress, new Bytes32("".getBytes())).get());
 
         log.info("Using socket server {}", api.getMainConfig().getSocketServer());
-        Session session = api.connectToSocket(new EtherdeltaSocketAdapter());
-        // Thread.sleep(10000);
-        // session.close();
+        // final CountDownLatch countDownLatch=new CountDownLatch(1);
+
+        api.connectToSocket(new EtherdeltaSocketAdapter());
 
     }
 }
