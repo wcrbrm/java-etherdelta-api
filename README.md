@@ -1,2 +1,4 @@
-# java-etherdelta-api
-work in progress
+# Java Etherdelta API
+
+Work in progress. Please use on your own risk.
+
