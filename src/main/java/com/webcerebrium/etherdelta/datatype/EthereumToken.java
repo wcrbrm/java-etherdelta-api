@@ -1,4 +1,4 @@
-package com.webcerebrium.etherdelta.api;
+package com.webcerebrium.etherdelta.datatype;
 
 import com.google.gson.JsonObject;
 import lombok.Data;
@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class EthereumToken {
 
+    String name = "";
     int decimals = 18;
     String address = "";
-    String name = "";
 
     public EthereumToken() {
     }
@@ -23,6 +23,10 @@ public class EthereumToken {
         if (obj.has("decimals") && obj.get("decimals").isJsonPrimitive()) {
             this.decimals = (int) obj.get("decimals").getAsLong();
         }
+    }
+
+    public String toString() {
+        return this.getName();
     }
 
 }

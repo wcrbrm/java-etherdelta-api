@@ -2,8 +2,8 @@ package com.webcerebrium.etherdelta.examples;
 
 import com.webcerebrium.etherdelta.api.EtherdeltaApi;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
-import com.webcerebrium.etherdelta.api.EtherdeltaSocketAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jetty.websocket.api.WebSocketPolicy;
 
 import java.util.concurrent.ExecutionException;
 
@@ -28,9 +28,13 @@ public class App {
         // log.info("ORDERS OF AVT = {}", smartContract.orders(tokenAddress, new Bytes32("".getBytes())).get());
 
         log.info("Using socket server {}", api.getMainConfig().getSocketServer());
-        // final CountDownLatch countDownLatch=new CountDownLatch(1);
 
-        api.connectToSocket(new EtherdeltaSocketAdapter());
-
+        WebSocketPolicy.newServerPolicy().setMaxTextMessageSize( 1024*1024*10 );
+        SellsOrdersWatcher adapter = new SellsOrdersWatcher();
+        adapter.setUser(api.getWallet().getAddress());
+        do {
+            api.connectToSocket(adapter);
+            Thread.sleep(2000); // wait 2 seconds before reconnect
+        } while (true);
     }
 }

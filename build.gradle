@@ -76,6 +76,8 @@ dependencies {
 
     // JETTY WEBSOCKET CLIENT
     compile group: 'org.eclipse.jetty.websocket', name: 'websocket-client', version: '9.4.7.v20170914'
+    // ADDITIONAL LIBRARY TO CREATE SOCKET PACKETS (used for socket.emit)
+    // compile 'com.codeminders.socketio:socket-io:1.0.3'
 
     // WEB3J INTERFACE. See more at https://docs.web3j.io/getting_started.html
     compile 'org.web3j:core:2.3.1'

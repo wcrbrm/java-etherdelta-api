@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.contract.EtherdeltaContract;
+import com.webcerebrium.etherdelta.datatype.EthereumToken;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.web3j.protocol.Web3j;
