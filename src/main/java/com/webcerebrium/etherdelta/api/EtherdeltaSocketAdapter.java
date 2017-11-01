@@ -16,10 +16,14 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
 import java.nio.channels.ClosedChannelException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
@@ -55,7 +59,10 @@ public abstract class EtherdeltaSocketAdapter extends WebSocketAdapter {
 
     @Override
     public void onWebSocketError(Throwable cause) {
-        if (cause instanceof ClosedChannelException) {
+        if (cause instanceof UpgradeException) {
+            log.error("UPGRADE ERROR: {}", cause.getMessage());
+            countdown.countDown();
+        } else if (cause instanceof ClosedChannelException) {
             log.error("DISCONNECTED");
             countdown.countDown();
         } else {
@@ -93,15 +100,14 @@ public abstract class EtherdeltaSocketAdapter extends WebSocketAdapter {
 
     /**
      * Method for overriding in inherited class
-     * @param tokenAddr token address of ETH_TOKEN market
      * @param market object of the market
      */
-    protected abstract void onMarket(String tokenAddr, EtherdeltaMarket market);
+    protected abstract void onMarket(EtherdeltaMarket market);
 
     @Override
     public void onWebSocketText(String message) {
         String noNumberAtStart = message;
-        log.debug("onWebSocketText {}", message);
+        // log.debug("onWebSocketText {}", message);
         String code = "";
         while (startWithDigit(noNumberAtStart)) {
             code += noNumberAtStart.charAt(0);
@@ -157,7 +163,12 @@ public abstract class EtherdeltaSocketAdapter extends WebSocketAdapter {
     private void onCommand(String messageCode, String command, JsonArray jsonElements) throws EtherdeltaApiException {
         if (command.equals("market")) {
             JsonObject market = requireObject(command, jsonElements);
-            log.warn("Event: {} {}", command, market.toString()); // important to support
+            Set<String> keys = new HashSet<>();
+            for (Map.Entry<String, JsonElement> entry : market.entrySet()) {
+                keys.add(entry.getKey());
+            }
+            log.warn("Event: {} {}", command, keys.toString() ); // important to support
+            onMarket(new EtherdeltaMarket(config, market));
         } else if (command.equals("returnTicker")) {
             JsonObject mapTickers = requireObject(command, jsonElements);
             log.debug("Event: {}, {} symbols", command, mapTickers.entrySet().size());
@@ -190,9 +201,12 @@ public abstract class EtherdeltaSocketAdapter extends WebSocketAdapter {
 
     public void emitEvent(String message, JsonObject payload) {
         try {
-            log.debug("Sending getMarket: 42{}", payload.toString());
+            log.debug("Emitting '{}' {}", message, payload.toString());
             RemoteEndpoint remote = this.getSess().getRemote();
-            remote.sendString("42" + payload.toString());
+            JsonArray msg = new JsonArray();
+            msg.add(message);
+            msg.add(payload);
+            remote.sendString("42" + msg.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

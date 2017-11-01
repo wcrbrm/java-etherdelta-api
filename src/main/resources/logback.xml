@@ -9,6 +9,7 @@
     <logger name="org.eclipse.jetty" level="WARN" />
     <logger name="com.webcerebrium.etherdelta.examples" level="DEBUG" />
     <logger name="com.webcerebrium.etherdelta.api" level="DEBUG" />
+    <logger name="com.webcerebrium.etherdelta.api.EtherdeltaSocketAdapter" level="DEBUG" />
     <logger name="com.webcerebrium.etherdelta.datatype" level="WARN" />
     <logger name="com.webcerebrium.etherdelta.datatype.EtherdeltaOrderBook" level="WARN" />
 

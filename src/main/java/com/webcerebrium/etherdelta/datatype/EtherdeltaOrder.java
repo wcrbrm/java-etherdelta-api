@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 @Slf4j
@@ -48,6 +50,7 @@ public class EtherdeltaOrder {
     public BigDecimal amountFilled = null;
 
     public EtherdeltaOrder() {
+        Locale.setDefault(new Locale("en", "US"));
     }
 
     private void jsonExpect(JsonObject obj, Set<String> fields) throws EtherdeltaApiException {
@@ -67,6 +70,7 @@ public class EtherdeltaOrder {
     }
 
     public EtherdeltaOrder(EtherdeltaMainConfig config, EtherdeltaOrderSide side, JsonObject obj) throws EtherdeltaApiException {
+        Locale.setDefault(new Locale("en", "US"));
 
         jsonExpect(obj, ImmutableSet.of("id", "amount",
                 "price", "amountGet", "amountGive", "tokenGet", "tokenGive", "updated"));
@@ -114,5 +118,29 @@ public class EtherdeltaOrder {
 
         String dateString = obj.get("updated").getAsString();
         this.updated = IsoDate.parse(dateString);
+    }
+
+    public String getPlainText() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(String.format("%6s ", side)).append(" ");
+        sb.append(formatPrice(price)).append(" ");
+        int decimals = 18;
+        sb.append(formatAmount(amount, decimals)).append(" ");
+//        sb.append(id).append("\t");
+//         sb.append(updated).append(" ");
+        return sb.toString();
+    }
+
+    private String formatAmount(BigDecimal amount, int decimals) {
+        String fmt = "############.######";
+        if (decimals % 6 == 0) fmt = "######,######.######";
+        else if (decimals % 3 == 0) fmt = "###,###.######";
+
+        DecimalFormat formatter = new DecimalFormat(fmt);
+        return String.format("%32s", formatter.format(amount));
+    }
+
+    private String formatPrice(BigDecimal amount) {
+        return String.format("%20.8f", amount);
     }
 }

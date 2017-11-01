@@ -39,6 +39,17 @@ public class EtherdeltaTrade {
         }
     }
 
+    private BigDecimal safeDecimal(JsonObject obj, String field) {
+        if (obj.has(field) && obj.get(field).isJsonPrimitive() && obj.get(field) != null) {
+            try {
+                return obj.get(field).getAsBigDecimal();
+            } catch (java.lang.NumberFormatException nfe) {
+                log.warn("Number format exception in field={} value={} trade={}", field, obj.get(field), obj.toString());
+            }
+        }
+        return null;
+    }
+
     public EtherdeltaTrade(EtherdeltaMainConfig config, JsonObject obj) throws EtherdeltaApiException {
         jsonExpect(obj, ImmutableSet.of("tokenAddr" ,"price", "amount", "side", "buyer", "seller", "date"));
 
@@ -55,10 +66,10 @@ public class EtherdeltaTrade {
         }
 
         this.txHash = obj.get("txHash").getAsString();
-        this.price = obj.get("price").getAsBigDecimal();
-        this.amount = obj.get("amount").getAsBigDecimal();
+        this.price = safeDecimal(obj, "price");
+        this.amount = safeDecimal(obj, "amount");
         this.side = EtherdeltaOrderSide.valueOf(obj.get("side").getAsString().toUpperCase());
-        this.amountBase = obj.get("amount").getAsBigDecimal();
+        this.amountBase = safeDecimal(obj, "amount");
         this.buyer = obj.get("buyer").getAsString();
         this.seller = obj.get("seller").getAsString();
         String dateString = obj.get("date").getAsString();
