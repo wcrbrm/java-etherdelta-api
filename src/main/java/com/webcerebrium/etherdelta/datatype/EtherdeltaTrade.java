@@ -3,7 +3,7 @@ package com.webcerebrium.etherdelta.datatype;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
-import com.webcerebrium.etherdelta.api.EtherdeltaMainConfig;
+import com.webcerebrium.etherdelta.api.EtherdeltaConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +50,7 @@ public class EtherdeltaTrade {
         return null;
     }
 
-    public EtherdeltaTrade(EtherdeltaMainConfig config, JsonObject obj) throws EtherdeltaApiException {
+    public EtherdeltaTrade(EtherdeltaConfig config, JsonObject obj) throws EtherdeltaApiException {
         jsonExpect(obj, ImmutableSet.of("tokenAddr" ,"price", "amount", "side", "buyer", "seller", "date"));
 
         tokenAddr = obj.get("tokenAddr").getAsString();

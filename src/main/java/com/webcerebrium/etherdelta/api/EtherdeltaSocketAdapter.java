@@ -31,7 +31,7 @@ public abstract class EtherdeltaSocketAdapter extends WebSocketAdapter {
 
     @Getter
     @Setter
-    EtherdeltaMainConfig config = null;
+    EtherdeltaConfig config = null;
 
     @Getter
     @Setter

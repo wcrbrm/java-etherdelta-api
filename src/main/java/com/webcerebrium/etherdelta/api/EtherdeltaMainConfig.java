@@ -3,11 +3,9 @@ package com.webcerebrium.etherdelta.api;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.webcerebrium.etherdelta.contract.EtherdeltaContract;
 import com.webcerebrium.etherdelta.datatype.EthereumToken;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.web3j.protocol.Web3j;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -16,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @Data
-public class EtherdeltaMainConfig {
+public class EtherdeltaMainConfig  extends EtherdeltaConfig {
 
     public JsonObject jsonConfig = null;
 
@@ -35,16 +33,6 @@ public class EtherdeltaMainConfig {
         this.initTokens();
     }
 
-    /**
-     * Iinitializing from Remote URL
-     * @param configUrl remote URL to read
-     * @throws EtherdeltaApiException in case of any error
-     */
-    public EtherdeltaMainConfig(String configUrl) throws EtherdeltaApiException {
-        this.jsonConfig = new EtherdeltaRequest(configUrl).read().asJsonObject();
-        this.initTokens();
-    }
-
     private void initTokens() {
         if (this.jsonConfig.has("tokens") && this.jsonConfig.get("tokens").isJsonArray()) {
             JsonArray arrTokens =  this.jsonConfig.get("tokens").getAsJsonArray();
@@ -58,6 +46,7 @@ public class EtherdeltaMainConfig {
         }
     }
 
+    @Override
     public String getSocketServer() throws EtherdeltaApiException  {
         if (!jsonConfig.has("socketServer") || !jsonConfig.get("socketServer").isJsonArray()) {
             throw new EtherdeltaApiException("Expected to have socketServer in main config");
@@ -73,6 +62,7 @@ public class EtherdeltaMainConfig {
                 + "/socket.io/?EIO=3&transport=websocket&t=" + timestamp;
     }
 
+    @Override
     public String getLastAddress() throws EtherdeltaApiException {
         if (!jsonConfig.has("contractEtherDeltaAddrs") || !jsonConfig.get("contractEtherDeltaAddrs").isJsonArray()) {
             throw new EtherdeltaApiException("Expected to have contractEtherDeltaAddrs in main config");
@@ -88,12 +78,7 @@ public class EtherdeltaMainConfig {
         return first.get("addr").getAsString();
     }
 
-    public EtherdeltaContract getSmartContract(Web3j web3j, EthereumWallet wallet) throws EtherdeltaApiException {
-        log.info("Loading smart contract at address {} gasPrice={} gasLimit={}", this.getLastAddress(), getGasPrice(), getGasLimit());
-        return EtherdeltaContract.load(
-                this.getLastAddress(), web3j, wallet.getWeb3Credentials(),
-                getGasPrice(), getGasLimit());
-    }
+
 
     /**
      * Getting Gas price from stored JSON configuration
@@ -107,7 +92,7 @@ public class EtherdeltaMainConfig {
      * Getting Gas limit from stored JSON configuration
      * @return gas limit
      */
-    public BigInteger getGasLimit() {
+    public BigInteger getGasOrder() {
         return jsonConfig.get("gasOrder").getAsBigInteger();
     }
 }

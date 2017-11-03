@@ -2,8 +2,6 @@ package com.webcerebrium.etherdelta.api;
 
 import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.contract.EtherdeltaContract;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +10,6 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.web3j.protocol.Web3j;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
@@ -32,7 +28,12 @@ public class EtherdeltaApi {
     /**
      * Configuration Details
      */
-    public EtherdeltaMainConfig mainConfig = null;
+    public EtherdeltaConfig mainConfig = null;
+
+    /**
+     * Environment configuration
+     */
+    public EtherdeltaEnvConfig envConfig = new EtherdeltaEnvConfig();
 
     /**
      * Wallet, connected for trasing
@@ -47,17 +48,7 @@ public class EtherdeltaApi {
      * Main API constructor, starts with remote trequest to main configuration JSON
      * @throws EtherdeltaApiException
      */
-    public EtherdeltaApi() throws EtherdeltaApiException {
-
-        try {
-            InputStream resource = this.getClass().getClassLoader().getResourceAsStream("main.json");
-            Gson gson = new Gson();
-            JsonObject jsonObject = gson.fromJson(new InputStreamReader(resource), JsonObject.class);
-            this.mainConfig = new EtherdeltaMainConfig(jsonObject);
-        } catch (Exception e) {
-            log.error("ERROR {}", e.getMessage());
-        }
-
+    public EtherdeltaApi() {
     }
 
     /**

@@ -3,7 +3,7 @@ package com.webcerebrium.etherdelta.datatype;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
-import com.webcerebrium.etherdelta.api.EtherdeltaMainConfig;
+import com.webcerebrium.etherdelta.api.EtherdeltaConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,7 +69,7 @@ public class EtherdeltaOrder {
         return null;
     }
 
-    public EtherdeltaOrder(EtherdeltaMainConfig config, EtherdeltaOrderSide side, JsonObject obj) throws EtherdeltaApiException {
+    public EtherdeltaOrder(EtherdeltaConfig config, EtherdeltaOrderSide side, JsonObject obj) throws EtherdeltaApiException {
         Locale.setDefault(new Locale("en", "US"));
 
         jsonExpect(obj, ImmutableSet.of("id", "amount",

@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
-import com.webcerebrium.etherdelta.api.EtherdeltaMainConfig;
+import com.webcerebrium.etherdelta.api.EtherdeltaConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ public class EtherdeltaMarket {
     public EtherdeltaMarket() {
     }
 
-    public EtherdeltaMarket(EtherdeltaMainConfig config, JsonObject obj) throws EtherdeltaApiException {
+    public EtherdeltaMarket(EtherdeltaConfig config, JsonObject obj) throws EtherdeltaApiException {
         this.jsonOriginal = obj;
 
         if (obj.has("trades")) {

@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
-import com.webcerebrium.etherdelta.api.EtherdeltaMainConfig;
+import com.webcerebrium.etherdelta.api.EtherdeltaConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,7 +46,7 @@ public class EtherdeltaOrderBook {
         }
     }
 
-    public EtherdeltaOrderBook(EtherdeltaMainConfig config, JsonObject obj) throws EtherdeltaApiException {
+    public EtherdeltaOrderBook(EtherdeltaConfig config, JsonObject obj) throws EtherdeltaApiException {
         jsonExpect(obj, ImmutableSet.of("buys", "sells"));
 
         JsonArray buys = obj.get("buys").getAsJsonArray();

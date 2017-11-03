@@ -3,7 +3,7 @@ package com.webcerebrium.etherdelta.datatype;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
 import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
-import com.webcerebrium.etherdelta.api.EtherdeltaMainConfig;
+import com.webcerebrium.etherdelta.api.EtherdeltaConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +41,7 @@ public class EtherdeltaReturnTicker {
         return null;
     }
 
-    public EtherdeltaReturnTicker(EtherdeltaMainConfig config, String symbol, JsonObject obj) throws EtherdeltaApiException {
+    public EtherdeltaReturnTicker(EtherdeltaConfig config, String symbol, JsonObject obj) throws EtherdeltaApiException {
         this.symbol = symbol;
         jsonExpect(obj, ImmutableSet.of("tokenAddr"));
 
