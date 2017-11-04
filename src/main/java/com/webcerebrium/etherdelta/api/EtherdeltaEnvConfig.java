@@ -49,4 +49,21 @@ public class EtherdeltaEnvConfig {
         }
         return "";
     }
+
+    public String getMarketCacheDir() {
+        return this.getVariable("ETHERDELTA_MARKET_CACHE_DIR");
+    }
+
+    public String getTokenCacheDir() {
+        return this.getVariable("ETHERDELTA_TOKEN_CACHE_DIR");
+    }
+
+    public String getWalletAddress() {
+        return this.getVariable("ETHERDELTA_WALLET_ADDRESS");
+    }
+
+    public String getWalletPrivateKey() {
+        return this.getVariable("ETHERDELTA_WALLET_PRIVATE_KEY");
+    }
+
 }

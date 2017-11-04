@@ -11,6 +11,7 @@ import java.util.Map;
 @Slf4j
 public abstract class EtherdeltaConfig {
 
+    public abstract EtherdeltaEnvConfig getEnvConfig();
     public abstract String getSocketServer() throws EtherdeltaApiException;
     public abstract String getLastAddress() throws EtherdeltaApiException;
     public abstract BigInteger getGasPrice();
@@ -22,5 +23,13 @@ public abstract class EtherdeltaConfig {
         return EtherdeltaContract.load(
                 this.getLastAddress(), web3j, wallet.getWeb3Credentials(),
                 getGasPrice(), getGasOrder());
+    }
+
+    public void discoverToken(String address) {
+        // Read token from etherscan/token/{address}
+        EthereumTokenEtherscanInfo tokenInfo = new EthereumTokenEtherscanInfo(address);
+        tokenInfo.discover(getEnvConfig());
+        log.info("TOKEN DISCOVERED {}", tokenInfo.toString());
+        getTokens().put(address, tokenInfo.getToken());
     }
 }

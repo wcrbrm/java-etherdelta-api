@@ -3,27 +3,39 @@ package com.webcerebrium.etherdelta.api;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.webcerebrium.etherdelta.datatype.EthereumToken;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Data
 public class EtherdeltaMainConfig  extends EtherdeltaConfig {
 
+    @Getter @Setter
     public JsonObject jsonConfig = null;
+
+    @Getter @Setter
+    EtherdeltaEnvConfig envConfig = new EtherdeltaEnvConfig();
 
     /**
      * Map of Tokens, parsed from JSON file
      * Key of that map is token Ethereum address
      */
+    @Getter
+    @Setter
     public Map<String, EthereumToken> tokens = null;
 
+    public EtherdeltaMainConfig() {
+    }
     /**
      * Initializing from JSON configuration
      * @param jsonConfig configuration to read
@@ -33,10 +45,10 @@ public class EtherdeltaMainConfig  extends EtherdeltaConfig {
         this.initTokens();
     }
 
-    private void initTokens() {
+    private EtherdeltaConfig initTokens() {
         if (this.jsonConfig.has("tokens") && this.jsonConfig.get("tokens").isJsonArray()) {
             JsonArray arrTokens =  this.jsonConfig.get("tokens").getAsJsonArray();
-            tokens = new HashMap<String, EthereumToken>();
+            tokens = new HashMap<>();
 
             for (JsonElement entry: arrTokens) {
                 JsonObject asJsonObject = entry.getAsJsonObject();
@@ -44,6 +56,7 @@ public class EtherdeltaMainConfig  extends EtherdeltaConfig {
                 tokens.put(ethereumToken.getAddress(), ethereumToken);
             }
         }
+        return this;
     }
 
     @Override
@@ -94,5 +107,21 @@ public class EtherdeltaMainConfig  extends EtherdeltaConfig {
      */
     public BigInteger getGasOrder() {
         return jsonConfig.get("gasOrder").getAsBigInteger();
+    }
+
+    /**
+     *
+     * @param resourcePath name of the resource
+     * @return this object for fluent interface
+     */
+    public EtherdeltaConfig fromResource(String resourcePath) throws EtherdeltaApiException {
+        EtherdeltaConfig config = new EtherdeltaMainConfig();
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
+        if (is == null) throw new EtherdeltaApiException("Resource could not be found " + resourcePath);
+        JsonReader reader = new JsonReader(new InputStreamReader(is));
+        JsonElement configObject = (new JsonParser()).parse(reader);
+        this.jsonConfig = configObject.getAsJsonObject();
+        return this.initTokens();
     }
 }

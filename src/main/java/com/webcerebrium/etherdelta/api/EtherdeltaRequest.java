@@ -36,6 +36,7 @@ public class EtherdeltaRequest {
     public String requestUrl = "";
     public String method = "GET";
     public String lastResponse = "";
+    public boolean logging = true;
 
     public String apiKey = "";
     public String secretKey = "";
@@ -80,6 +81,16 @@ public class EtherdeltaRequest {
     }
 
     /**
+     * Tun logging on/of. Could be tuned in logback
+     * @param flag whether to
+     * @return this request object
+     */
+    public EtherdeltaRequest setLog(boolean flag) {
+        this.logging = flag;
+        return this;
+    }
+
+    /**
      * Opens HTTPS connection and save connection Handler
      @return this request object
       * @throws EtherdeltaApiException in case of any error
@@ -103,7 +114,9 @@ public class EtherdeltaRequest {
         URL url = null;
         try {
             url = new URL(requestUrl);
-            log.debug("{} {}", getMethod(), url);
+            if (logging) {
+                log.debug("{} {}", getMethod(), url);
+            }
         } catch (MalformedURLException e) {
             throw new EtherdeltaApiException("Mailformed URL " + e.getMessage());
         }
@@ -149,7 +162,9 @@ public class EtherdeltaRequest {
 
             // posting payload it we do not have it yet
             if (!Strings.isNullOrEmpty(getRequestBody())) {
-                log.debug("Payload: {}", getRequestBody());
+                if (logging) {
+                    log.debug("Payload: {}", getRequestBody());
+                }
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
                 OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
@@ -167,7 +182,9 @@ public class EtherdeltaRequest {
 
             BufferedReader br = new BufferedReader( new InputStreamReader(is));
             lastResponse = IOUtils.toString(br);
-            log.debug("Response: {}", lastResponse);
+            if (logging) {
+                log.debug("Response: {}", lastResponse);
+            }
 
             if (conn.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST) {
                 // Try to parse JSON
@@ -205,6 +222,5 @@ public class EtherdeltaRequest {
     public JsonArray asJsonArray() {
         return (JsonArray)jsonParser.parse(getLastResponse());
     }
-
 
 }

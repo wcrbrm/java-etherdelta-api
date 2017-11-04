@@ -1,15 +1,22 @@
 package com.webcerebrium.etherdelta.api;
 
 import com.webcerebrium.etherdelta.datatype.EthereumToken;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 
-@Data
 public class EtherdeltaDefaultConfig extends EtherdeltaConfig {
 
-    public Map<String, EthereumToken> tokens = null;
+    @Getter
+    @Setter
+    EtherdeltaEnvConfig envConfig = new EtherdeltaEnvConfig();
+
+    @Getter
+    @Setter
+    public Map<String, EthereumToken> tokens = new HashMap<>();
 
     public EtherdeltaDefaultConfig() {
     }

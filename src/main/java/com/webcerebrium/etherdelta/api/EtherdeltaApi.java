@@ -66,6 +66,9 @@ public class EtherdeltaApi {
     }
 
     public EtherdeltaContract getSmartContract(Web3j web3j) throws EtherdeltaApiException {
+        if (wallet == null) {
+            throw new EtherdeltaApiException("Please initialize wallet first");
+        }
         return this.mainConfig.getSmartContract(web3j, wallet);
     }
 
