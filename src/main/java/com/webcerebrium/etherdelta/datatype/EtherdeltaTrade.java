@@ -44,7 +44,7 @@ public class EtherdeltaTrade {
             try {
                 return obj.get(field).getAsBigDecimal();
             } catch (java.lang.NumberFormatException nfe) {
-                log.warn("Number format exception in field={} value={} trade={}", field, obj.get(field), obj.toString());
+                log.info("Number format exception in field={} value={} trade={}", field, obj.get(field), obj.toString());
             }
         }
         return null;

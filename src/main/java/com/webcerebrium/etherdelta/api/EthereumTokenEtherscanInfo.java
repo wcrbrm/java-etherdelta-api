@@ -45,7 +45,7 @@ public class EthereumTokenEtherscanInfo {
         if (matcherDecimals.find()) {
             decimals = Long.valueOf(matcherDecimals.group(1).trim());
         } else {
-            log.error("Decimals not found for token at address {}", this.getAddress());
+            log.warn("Decimals not found for token at address {}", this.getAddress());
         }
 
         Pattern patternImage = Pattern.compile("<img src='/token/images/([^']+)' style='margin-top: -3px' /> TOKEN", Pattern.MULTILINE);
@@ -101,7 +101,7 @@ public class EthereumTokenEtherscanInfo {
             try {
                 parse(Files.toString(cacheFile, Charsets.UTF_8));
             } catch (IOException e) {
-                log.info("Token file reading error {}", e.getMessage());
+                log.warn("Token file reading error {}", e.getMessage());
             }
         } else {
             String sUrl = getEtherscanRoot() + "/token/" + this.getAddress();
@@ -109,7 +109,7 @@ public class EthereumTokenEtherscanInfo {
             try {
                 Files.write(content.getBytes(), cacheFile);
             } catch (IOException e) {
-                log.info("Token caching Error {}", e.getMessage());
+                log.warn("Token caching Error {}", e.getMessage());
             }
             parse(content);
         }

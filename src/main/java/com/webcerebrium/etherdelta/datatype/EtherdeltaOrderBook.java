@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -113,6 +114,13 @@ public class EtherdeltaOrderBook {
         return buys.get(0).getAmount();
     }
 
+    public BigDecimal getPriceSpread() {
+        BigDecimal bestSellPrice = getBestSellPrice();
+        BigDecimal bestBuyPrice = getBestBuyPrice();
+        if (bestBuyPrice == null || bestSellPrice == null) return null;
+        return (bestSellPrice.subtract(bestBuyPrice))
+                .multiply(BigDecimal.valueOf(100)).divide(bestBuyPrice, MathContext.DECIMAL32);
+    }
 
 
 

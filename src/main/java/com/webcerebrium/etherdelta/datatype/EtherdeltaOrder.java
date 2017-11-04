@@ -64,7 +64,11 @@ public class EtherdeltaOrder {
 
     private BigDecimal safeDecimal(JsonObject obj, String field) {
         if (obj.has(field) && obj.get(field).isJsonPrimitive()) {
-            return obj.get(field).getAsBigDecimal();
+            try {
+                return obj.get(field).getAsBigDecimal();
+            } catch (NumberFormatException nfe) {
+                log.info("Number format exception in field={} value={} trade={}", field, obj.get(field), obj.toString());
+            }
         }
         return null;
     }
@@ -120,27 +124,44 @@ public class EtherdeltaOrder {
         this.updated = IsoDate.parse(dateString);
     }
 
+    /**
+     * @return number of decimals for current market
+     */
+    public int getDecimals() {
+        if (side == EtherdeltaOrderSide.BUY) {
+            return get.getDecimals();
+        } else if (side == EtherdeltaOrderSide.SELL) {
+            return give.getDecimals();
+        }
+        return 18;
+    }
+
+    /**
+     * @return quantity to be purchased/sold under this order book, taking decimals into consideration
+     */
+    public BigDecimal getAbsAmount() {
+        return amount.multiply(BigDecimal.valueOf(Math.pow(10, - getDecimals())));
+    }
+
+
     public String getPlainText() {
         StringBuffer sb = new StringBuffer();
         sb.append(String.format("%6s ", side)).append(" ");
         sb.append(formatPrice(price)).append(" ");
-        int decimals = 18;
-        sb.append(formatAmount(amount, decimals)).append(" ");
-//        sb.append(id).append("\t");
-//         sb.append(updated).append(" ");
+        sb.append(formattedAmount());
         return sb.toString();
     }
 
-    private String formatAmount(BigDecimal amount, int decimals) {
-        String fmt = "############.######";
-        if (decimals % 6 == 0) fmt = "######,######.######";
-        else if (decimals % 3 == 0) fmt = "###,###.######";
-
+    /**
+     * @return nice looking quantity to be purchased
+     */
+    private String formattedAmount() {
+        String fmt = "###,###.######";
         DecimalFormat formatter = new DecimalFormat(fmt);
-        return String.format("%32s", formatter.format(amount));
+        return String.format("%12s", formatter.format(getAbsAmount()));
     }
 
     private String formatPrice(BigDecimal amount) {
-        return String.format("%20.8f", amount);
+        return String.format("%20.12f", amount);
     }
 }

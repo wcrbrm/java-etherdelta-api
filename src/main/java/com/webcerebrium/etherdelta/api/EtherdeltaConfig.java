@@ -29,7 +29,7 @@ public abstract class EtherdeltaConfig {
         // Read token from etherscan/token/{address}
         EthereumTokenEtherscanInfo tokenInfo = new EthereumTokenEtherscanInfo(address);
         tokenInfo.discover(getEnvConfig());
-        log.info("TOKEN DISCOVERED {}", tokenInfo.toString());
+        log.debug("TOKEN DISCOVERED {}", tokenInfo.toString());
         getTokens().put(address, tokenInfo.getToken());
     }
 }
