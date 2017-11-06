@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,11 @@ public class EtherdeltaMarket {
     EtherdeltaOrderBook orderbook = new EtherdeltaOrderBook();
     List<EtherdeltaTrade> trades = new LinkedList<>();
     List<EtherdeltaReturnTicker> tickers = new LinkedList<>();
-
     JsonObject jsonOriginal = null;
+
+    public BigDecimal getMakerFee() { return BigDecimal.ZERO; }
+    public BigDecimal getTakerFee() { return BigDecimal.valueOf(0.003); } // 0.3%
+    public BigDecimal getTransactionGasCost() { return BigDecimal.valueOf(0.001); }
 
     private void initFromJson(EtherdeltaConfig config, JsonObject obj) throws EtherdeltaApiException {
         this.jsonOriginal = obj;

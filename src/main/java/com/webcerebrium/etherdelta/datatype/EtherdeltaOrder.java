@@ -161,7 +161,11 @@ public class EtherdeltaOrder {
         return String.format("%12s", formatter.format(getAbsAmount()));
     }
 
-    private String formatPrice(BigDecimal amount) {
-        return String.format("%20.12f", amount);
+    private String formatPrice(BigDecimal price) {
+        return String.format("%20.12f", price);
+    }
+
+    public BigDecimal getEthVolume() {
+        return this.getAbsAmount().multiply(this.getPrice());
     }
 }

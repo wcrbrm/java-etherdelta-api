@@ -122,6 +122,24 @@ public class EtherdeltaOrderBook {
                 .multiply(BigDecimal.valueOf(100)).divide(bestBuyPrice, MathContext.DECIMAL32);
     }
 
+    public EtherdeltaOrder getBestSellOrder(BigDecimal minEthVolume) {
+        int index = 0;
+        do {
+            EtherdeltaOrder order = sells.get(index);
+            if (order.getEthVolume().compareTo(minEthVolume) >= 0) return order;
+            index ++;
+        } while (index < sells.size());
+        return null;
+    }
 
+    public EtherdeltaOrder getBestBuyOrder(BigDecimal minEthVolume) {
+        int index = 0;
+        do {
+            EtherdeltaOrder order = buys.get(index);
+            if (order.getEthVolume().compareTo(minEthVolume) >= 0) return order;
+            index ++;
+        } while (index < buys.size());
+        return null;
+    }
 
 }
