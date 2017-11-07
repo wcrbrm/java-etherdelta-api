@@ -44,6 +44,9 @@ public abstract class EtherdeltaSocketAdapter extends WebSocketAdapter {
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         log.error("ON CLOSE code={}, reason={}", statusCode, reason);
+        if (statusCode == 1006) {
+            try { Thread.sleep(10*1000); } catch (InterruptedException e) {}
+        }
         // see https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
         // for more status codes
         super.onWebSocketClose(statusCode, reason);
