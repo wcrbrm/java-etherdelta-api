@@ -2,6 +2,8 @@ package com.webcerebrium.etherdelta.api;
 
 import com.webcerebrium.etherdelta.contract.EtherdeltaContract;
 import com.webcerebrium.etherdelta.datatype.EthereumToken;
+import com.webcerebrium.etherdelta.datatype.EthereumTokenEtherscanInfo;
+import com.webcerebrium.etherdelta.datatype.EthereumWallet;
 import lombok.extern.slf4j.Slf4j;
 import org.web3j.protocol.Web3j;
 

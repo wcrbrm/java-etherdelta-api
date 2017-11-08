@@ -1,12 +1,13 @@
-package com.webcerebrium.etherdelta.api;
+package com.webcerebrium.etherdelta.datatype;
 
 import com.google.common.base.Strings;
+import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
 
 public class EtherdeltaSymbol {
 
     String symbol = "";
 
-    public EtherdeltaSymbol(String symbol)  throws EtherdeltaApiException  {
+    public EtherdeltaSymbol(String symbol)  throws EtherdeltaApiException {
         // sanitizing symbol, preventing from common user-input errors
         if (Strings.isNullOrEmpty(symbol)) {
             throw new EtherdeltaApiException ("Symbol cannot be empty. Example: BQXETH");

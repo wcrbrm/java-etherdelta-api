@@ -1,8 +1,10 @@
-package com.webcerebrium.etherdelta.api;
+package com.webcerebrium.etherdelta.datatype;
 
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import com.webcerebrium.etherdelta.datatype.EthereumToken;
+import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
+import com.webcerebrium.etherdelta.api.EtherdeltaEnvConfig;
+import com.webcerebrium.etherdelta.api.EtherdeltaRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;

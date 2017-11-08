@@ -1,4 +1,4 @@
-package com.webcerebrium.etherdelta.api;
+package com.webcerebrium.etherdelta.websocket;
 
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
+import com.webcerebrium.etherdelta.api.EtherdeltaConfig;
 import com.webcerebrium.etherdelta.datatype.EtherdeltaFund;
 import com.webcerebrium.etherdelta.datatype.EtherdeltaMarket;
 import com.webcerebrium.etherdelta.datatype.EtherdeltaOrder;

@@ -3,6 +3,8 @@ package com.webcerebrium.etherdelta.api;
 import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import com.webcerebrium.etherdelta.contract.EtherdeltaContract;
+import com.webcerebrium.etherdelta.datatype.EthereumWallet;
+import com.webcerebrium.etherdelta.websocket.EtherdeltaSocketAdapter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.util.ssl.SslContextFactory;

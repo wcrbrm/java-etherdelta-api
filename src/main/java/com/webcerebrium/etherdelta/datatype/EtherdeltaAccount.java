@@ -1,4 +1,4 @@
-package com.webcerebrium.etherdelta.api;
+package com.webcerebrium.etherdelta.datatype;
 
 import lombok.Getter;
 import lombok.Setter;

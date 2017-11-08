@@ -1,6 +1,7 @@
-package com.webcerebrium.etherdelta.api;
+package com.webcerebrium.etherdelta.datatype;
 
 import com.google.common.base.Strings;
+import com.webcerebrium.etherdelta.api.EtherdeltaApiException;
 import lombok.Data;
 import org.web3j.crypto.Credentials;
 
@@ -14,7 +15,7 @@ public class EthereumWallet {
         this.privateKey = privateKey;
     }
 
-    public EthereumWallet validate() throws  EtherdeltaApiException {
+    public EthereumWallet validate() throws EtherdeltaApiException {
         if (Strings.isNullOrEmpty(address)) {
             throw new EtherdeltaApiException("ETHERDELTA_WALLET_ADDRESS, ETHERDELTA_WALLET_PRIVATE_KEY is not set");
         }

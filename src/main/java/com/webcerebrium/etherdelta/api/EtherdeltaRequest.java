@@ -216,7 +216,7 @@ public class EtherdeltaRequest {
         return (JsonObject)jsonParser.parse(getLastResponse());
     }
     /**
-     * Getting last response as google GAON JsonArray
+     * Getting last response as google JsonArray
      * @return response as Json Array
      */
     public JsonArray asJsonArray() {
