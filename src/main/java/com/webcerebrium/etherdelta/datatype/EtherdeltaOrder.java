@@ -148,7 +148,7 @@ public class EtherdeltaOrder {
         StringBuffer sb = new StringBuffer();
         sb.append(String.format("%6s ", side)).append(" ");
         sb.append(formatPrice(price)).append(" ");
-        sb.append(formattedAmount());
+        sb.append(formattedAmount()).append(" ").append(user);
         return sb.toString();
     }
 
